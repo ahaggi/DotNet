@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <pre id="res"></pre>
+
+    <form action="/token" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="text" name="UserName" value="a33@a.com" />
+        <input type="text" name="PAssword" value="a@A123456" />
+        <input type="text" name="ConfirmPassword" value="a@A123456" />
+        <input type="text" name="grant_type" value="password" />
+        <input type="submit" name="Submit" />
+    </form>
+
+    <script>
+        var on_load = async () => {
+            var res = await fetch("/api/Patient")
+            var data = await res.json()
+            document.getElementById("res").innerText = JSON.stringify(data, null, 4)
+        }
+        let input = {
+            Email: "a33@a.com",
+            Password: "a@A123456",
+            ConfirmPassword: "a@A123456"
+        }
+
+
+        var register = async () => {
+            let body = JSON.stringify(input)
+
+            uri = "api/Account/Register"
+            var res = await fetch(uri,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: body
+                })
+
+            if (res.status === 200)
+                console.log("registered")
+
+
+        }
+
+        var logIn = async () => {
+            
+
+            let input = "UserName=a33@a.com&Password=a@A123456&grant_type=password"
+
+            uri = "/Token"
+             var res = await fetch(uri,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    },
+                    body: input
+                })
+            var data = await res.json()
+
+            document.cookie = "token=" + data.access_token
+
+            console.log(document.cookie)
+            document.getElementById("res").innerText = JSON.stringify(data, null, 4)
+
+        }
+
+
+        logIn()
+
+    </script>
+</body>
+</html>
